@@ -1,0 +1,56 @@
+MODEL:
+  WEIGHTS: ''
+compute_precision:
+  grad_scaler: True
+  student:
+    backbone:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp16
+        # param_dtype: fp32
+        # reduce_dtype: fp32
+        buffer_dtype: fp32
+    dino_head:
+      sharding_strategy: SHARD_GRAD_OP
+      mixed_precision:
+        param_dtype: fp16
+        reduce_dtype: fp32
+        buffer_dtype: fp32
+train:
+  batch_size_per_gpu: 32
+  dataset_path: "COOC_stuff_164K" 
+  output_dir: .
+  saveckp_freq: 20
+  seed: 0
+  num_workers: 32
+  OFFICIAL_EPOCH_LENGTH: 1250
+  cache_dataset: true
+student:
+  arch: vit_large
+  num_points: 100
+  num_classes: 171
+  patch_size: 14
+  drop_path_rate: 0.3
+  layerscale: 1.0e-05
+  drop_path_uniform: true
+  pretrained_weights: './dinov2_vitl14_pretrain.pth'
+  ffn_layer: "mlp"
+  block_chunks: 0
+  qkv_bias: true
+  proj_bias: true
+  ffn_bias: true
+  num_register_tokens: 0
+  interpolate_antialias: false
+  interpolate_offset: 0.1
+optim:
+  epochs: 10
+  weight_decay: 0
+  lr: 3e-3 
+  warmup_epochs: 1
+  clip_grad: 1.0
+  scaling_rule: sqrt_wrt_1024
+crops:
+  global_crops_size: [518, 518]
+evaluation:
+  eval_period_iterations: 1250 
