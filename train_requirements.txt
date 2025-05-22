@@ -5,5 +5,4 @@ torchmetrics==1.6.0
 fvcore
 iopath
 xformers==0.0.27
-submitit
 submitit==1.5.2
