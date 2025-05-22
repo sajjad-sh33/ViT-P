@@ -107,6 +107,9 @@ model = dict(
             loss_weight=2.0,
             reduction='mean',
             class_weight=[1.0] * num_classes + [0.1])
+        Classification_Config_Path= "../ViT-P/dinov2/configs/InternImage/vitl14_ADE20k.yaml",
+        Classification_WEIGHTS="./model_Cityscapes_869_250point.pth",
+        alpha_semantic=0.4,
     ),
     test_cfg=dict(mode='whole'))
 img_norm_cfg = dict(

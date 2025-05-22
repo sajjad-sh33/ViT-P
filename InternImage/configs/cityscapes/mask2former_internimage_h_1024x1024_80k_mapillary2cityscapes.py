@@ -108,7 +108,7 @@ model = dict(
             loss_weight=2.0,
             reduction='mean',
             class_weight=[1.0] * num_classes + [0.1]),
-        Classification_Config_Path= "./dinov2/dinov2/configs/train/vitl14_Cityscapes.yaml",
+        Classification_Config_Path= "../ViT-P/dinov2/configs/InternImage/vitl14_Cityscapes.yaml",
         Classification_WEIGHTS="./model_Cityscapes_869_250point.pth",
         alpha_semantic=0.4,
     ),
