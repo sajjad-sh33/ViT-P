@@ -5,7 +5,8 @@ This repository includes the implementation for our paper, The Missing Point in 
 
 <img src="images/SOTA.png" width="100%"/>
 
-ViT-P is a novel two-stage segmentation framework that decouples mask generation from classification by first creating robust, class-agnostic mask proposals and then refining them with a point-based Vision Transformer. It operates without the need for pre-training, seamlessly integrating existing transformer backbones into diverse dense prediction tasks. By leveraging an innovative annotation strategy that incorporates both coarse and bounding box labels. Extensive experiments on COCO, ADE20K, and Cityscapes validate ViT-P’s state-of-the-art performance across panoptic, instance, and semantic segmentation tasks.
+ViT-P is a two-stage segmentation framework that decouples mask generation from classification. The first stage employs a proposal generator to produce class-agnostic mask proposals, while the second stage utilizes a point-based classification model built on the vision transformer to refine predictions by focusing on mask central points. ViT-P serves as a pre-training-free adapter, allowing the integration of various pre-trained vision transformers without modifying their architecture, which ensures adaptability to dense prediction tasks. Additionally, ViT-P demonstrates that coarse and bounding box annotations can effectively enhance classification without requiring additional training on fine annotation datasets, thereby reducing annotation costs while maintaining strong performance. Extensive experiments across COCO, ADE20K, and Cityscapes datasets validate the effectiveness of ViT-P, achieving state-of-the-art results with 54.0 PQ on ADE20K panoptic segmentation, 87.4 mIoU on Cityscapes semantic segmentation, and 63.6 mIoU on ADE20K semantic segmentation.
+
 
 <img src="images/Model_Architecture.png" width="100%"/>
 
@@ -44,15 +45,17 @@ pip install -r train_requirements.txt
 ```
 **Note:** Additional installation steps are required for evaluation; please check the guidelines in both the **Internimage** and **Oneformer** folders.
 
-- To execute the commands provided in the next section for evaluation, the dinov2 package must be included in the Python module search path.
+
+**Note:** To execute the commands provided in the next section for evaluation, the dinov2 package must be included in the Python module search path.
 
 ```bash
 cd ./ViT-P
 export PYTHONPATH="$PYTHONPATH:$(pwd)"
-cd ../OneFormer
   ```
 
+## Acknowledgement
 
+We thank the authors of [OneFormer](https://github.com/SHI-Labs/OneFormer), [InternImage](https://github.com/OpenGVLab/InternImage), and [dinov2][(https://github.com/SHI-Labs/Neighborhood-Attention-Transformer](https://github.com/facebookresearch/dinov2)) for releasing their helpful codebases.
 
 
 
