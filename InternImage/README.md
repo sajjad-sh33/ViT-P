@@ -1,4 +1,4 @@
-# InternImage +ViT-P
+# InternImage+ViT-P
 
 This folder contains the code implementation for evaluating the ViT-P model, using the InternImage model as the mask proposal generator.
 
@@ -79,7 +79,9 @@ Prepare datasets according to the [guidelines](https://github.com/open-mmlab/mms
 To evaluate a model's performance, use:
 
 ```bash
-?
+python test.py --config configs/cityscapes/mask2former_internimage_h_1024x1024_80k_mapillary2cityscapes.py \
+ --Segmentation_WEIGHTS pretrained/mask2former_internimage_h_1024x1024_80k_mapillary2cityscapes.pth \
+--Classification_WEIGHTS model_COCOStuff_711_200point.pth --eval mIoU
 ```
 
 
