@@ -113,21 +113,21 @@ python train_net.py --dist-url 'tcp://127.0.0.1:50164' \
 
 | Method | Segmentaion Backbone | Classification Backbone | Segmentation Crop Size |  PQ   | AP   | mIoU (s.s) | mIoU (ms+flip) | #params | config | Checkpoint |
 |   :---:| :---:    | :---:    |  :---:    | :---: | :---:| :---:           | :---:               | :---:   |  :---: |    :---:   |
-| OneFormer+ViT-P | DiNAT-L |DinoV2-B | 1280&times;1280 | 51.9 | 37.8 | 58.6 | 59.0 | 309M | [config](configs/ade20k/dinat/oneformer_dinat_large_bs16_160k_1280x1280.yaml) | [model](https://shi-labs.com/projects/oneformer/ade20k/1280x1280_250_16_dinat_l_oneformer_ade20k_160k.pth) |
-| OneFormer(COCO-Pretrained)+ViT-P | DiNAT-L |DinoV2-B | 1280&times;1280 | 54.0 | 40.7 | 59.7 | 59.9 | 309M | [config](configs/ade20k/dinat/coco_pretrain_oneformer_dinat_large_bs16_160k_1280x1280.yaml) | [model](https://shi-labs.com/projects/oneformer/ade20k/coco_pretrain_1280x1280_150_16_dinat_l_oneformer_ade20k_160k.pth) &#124; [pretrained](https://shi-labs.com/projects/oneformer/coco/150_16_dinat_l_oneformer_coco_100ep.pth) |
-| OneFormer(emb_dim=256)+ViT-P | InternImage-H |DinoV2-L | 896&times;896 | 54.5 | 40.6 | 61.2 | 61.6 | 1.4B | [config](configs/ade20k/intern_image/oneformer_intern_image_huge_bs16_160k_896x896.yaml) | [model](https://shi-labs.com/projects/oneformer/ade20k/896x896_250_16_intern_image_h_oneformer_ade20k_160k.pth) |
+| OneFormer+ViT-P | DiNAT-L |DinoV2-B | 1280&times;1280 | 51.9 | 37.8 | 58.6 | 59.0 | 309M | [config](configs/ade20k/dinat/oneformer_dinat_large_bs16_160k_1280x1280.yaml) | [segmentation model](https://shi-labs.com/projects/oneformer/ade20k/1280x1280_250_16_dinat_l_oneformer_ade20k_160k.pth) &#124; [classification model](https://huggingface.co/Sajjad-Sh33/ViT-P/resolve/main/model_ADE20k_base774_250point.pth) |
+| OneFormer(COCO-Pretrained)+ViT-P | DiNAT-L |DinoV2-B | 1280&times;1280 | 54.0 | 40.7 | 59.7 | 59.9 | 309M | [config](configs/ade20k/dinat/coco_pretrain_oneformer_dinat_large_bs16_160k_1280x1280.yaml) | [segmentation model](https://shi-labs.com/projects/oneformer/ade20k/coco_pretrain_1280x1280_150_16_dinat_l_oneformer_ade20k_160k.pth) &#124; [classification model](https://huggingface.co/Sajjad-Sh33/ViT-P/resolve/main/model_ADE20k_base774_250point.pth) |
+| OneFormer(emb_dim=256)+ViT-P | InternImage-H |DinoV2-L | 896&times;896 | 54.5 | 40.6 | 61.2 | 61.6 | 1.4B | [config](configs/ade20k/intern_image/oneformer_intern_image_huge_bs16_160k_896x896.yaml) | [segmentation model](https://shi-labs.com/projects/oneformer/ade20k/896x896_250_16_intern_image_h_oneformer_ade20k_160k.pth) &#124; [classification model](https://huggingface.co/Sajjad-Sh33/ViT-P/resolve/main/model_ADE20k_798_250point.pth) |
 
 
 ### Cityscapes
 
 | Method | Segmentaion Backbone	 | Classification Backbone|  PQ   | AP   | mIoU (s.s) | mIoU (ms+flip) | #params | config | Checkpoint |
 |   :---:| :---:    |:---:    | :---: | :---:| :---:      | :---:          | :---:   |  :---: |    :---:   |
-| OneFormer(Mapillary Vistas-Pretrained)+ViT-P | ConvNeXt-L |DinoV2-B | 70.1 | 49.0 | 84.9 | 85.5 | 306M | [config](configs/cityscapes/convnext/mapillary_pretrain_oneformer_convnext_large_bs16_90k.yaml) | [model](https://shi-labs.com/projects/oneformer/cityscapes/mapillary_pretrain_250_16_convnext_l_oneformer_cityscapes_90k.pth) &#124; [pretrained](https://shi-labs.com/projects/oneformer/mapillary/mapillary_pretrain_250_16_convnext_l_oneformer_mapillary_300k.pth) |
-| OneFormer(emb_dim=256)+ViT-P | InternImage-H |DinoV2-L| 70.8 | 50.6 | 85.4 | 85.9 | 1.4B | [config](configs/cityscapes/intern_image/oneformer_intern_image_huge_bs16_90k.yaml) | [model](https://shi-labs.com/projects/oneformer/cityscapes/250_16_intern_image_h_oneformer_cityscapes_90k.pth) |
+| OneFormer(Mapillary Vistas-Pretrained)+ViT-P | ConvNeXt-L |DinoV2-B | 70.1 | 49.0 | 84.9 | 85.5 | 306M | [config](configs/cityscapes/convnext/mapillary_pretrain_oneformer_convnext_large_bs16_90k.yaml) | [segmentation model](https://shi-labs.com/projects/oneformer/cityscapes/mapillary_pretrain_250_16_convnext_l_oneformer_cityscapes_90k.pth) &#124; [classification model]() |
+| OneFormer(emb_dim=256)+ViT-P | InternImage-H |DinoV2-L| 70.8 | 50.6 | 85.4 | 85.9 | 1.4B | [config](configs/cityscapes/intern_image/oneformer_intern_image_huge_bs16_90k.yaml) | [segmentation model](https://shi-labs.com/projects/oneformer/cityscapes/250_16_intern_image_h_oneformer_cityscapes_90k.pth) &#124; [classification model]() |
 
 ### COCO
 
 | Method | Segmentaion Backbone | Classification Backbone	|  PQ    | AP | mIoU | #params | config | Checkpoint |
 |   :---:| :---:    |  :---: | :---: | :---:              | :---:   | :---:  |  :---: |    :---:   |
-| OneFormer+ViT-P	 | DiNAT-L |DinoV2-B | 58.0 | 49.5 | 68.6 | 309M | [config](configs/coco/dinat/oneformer_dinat_large_bs16_100ep.yaml) | [model](https://shi-labs.com/projects/oneformer/coco/150_16_dinat_l_oneformer_coco_100ep.pth) |
+| OneFormer+ViT-P	 | DiNAT-L |DinoV2-B | 58.0 | 49.5 | 68.6 | 309M | [config](configs/coco/dinat/oneformer_dinat_large_bs16_100ep.yaml) | [segmentation model](https://shi-labs.com/projects/oneformer/coco/150_16_dinat_l_oneformer_coco_100ep.pth) &#124; [classification model](https://huggingface.co/Sajjad-Sh33/ViT-P/resolve/main/model_coco_base793_150points.pth) |
 
