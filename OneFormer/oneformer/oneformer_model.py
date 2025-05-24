@@ -136,7 +136,6 @@ class OneFormer(nn.Module):
 
         if not self.semantic_on:
             assert self.sem_seg_postprocess_before_inference
-####################################################################################################
 
         default_cfg = OmegaConf.create(dinov2_default_config)
         cfg = OmegaConf.load(self.classification_config_path)
@@ -154,7 +153,7 @@ class OneFormer(nn.Module):
         self.transform = torchvision.transforms.Compose([
             transforms.Resize(self.img_size),
         ])
-####################################################################################################
+
     @classmethod
     def from_config(cls, cfg):
         backbone = build_backbone(cfg)
@@ -321,26 +320,8 @@ class OneFormer(nn.Module):
         tasks = self.task_mlp(tasks.float())
 
 
-        # from fvcore.nn import FlopCountAnalysis, flop_count_table
-        # self.backbone.eval()
-        # # input_tensor_1 = image # Example input
-        # # input_tensor_2 = normalized_coords         # Another example input
-        # # inputs = (input_tensor_1, input_tensor_2)    # Tuple of inputs
-        # flops = FlopCountAnalysis(self.backbone, images.tensor)
-        # print(flop_count_table(flops))
-        # print(asdad)
-
-
-
         features = self.backbone(images.tensor)
 
-        # from fvcore.nn import FlopCountAnalysis, flop_count_table
-        # self.sem_seg_head.eval()
-        # inputs = (features, tasks)
-        # flops = FlopCountAnalysis(self.sem_seg_head, inputs)
-        # print(flop_count_table(flops))
-        # print(asdad)
-    
         outputs = self.sem_seg_head(features, tasks)
 
         if self.training:
@@ -394,10 +375,9 @@ class OneFormer(nn.Module):
                     )
                     mask_cls_result = mask_cls_result.to(mask_pred_result)
 
-##################################################################################
 
                 point_cls_result = self.create_class_tensor_no_loop(mask_pred_result, input_per_image['file_name'], images.tensor).to(mask_cls_result)
-                # point_cls_result = self.create_class_tensor_no_loop(mask_pred_result, "../datasets/cityscapes/leftImg8bit/val/frankfurt/frankfurt_000000_012121_leftImg8bit.png").to(mask_cls_result)
+            
                 in_cls_results = mask_cls_result[..., :-1] 
                 out_cls_results = point_cls_result
                 
@@ -411,7 +391,6 @@ class OneFormer(nn.Module):
                     cls_results.softmax(-1) * (1.0 - is_void_prob),
                     is_void_prob], dim=-1)
                 mask_cls_result = torch.log(mask_cls_probs + 1e-8)
-##################################################################################
 
 
                 # semantic segmentation inference
@@ -438,7 +417,6 @@ class OneFormer(nn.Module):
             return processed_results
 
 
-####################################################################################### 
     def create_class_tensor_no_loop(self, masks, image_path, image):
         q, h, w = masks.shape
         
@@ -460,25 +438,14 @@ class OneFormer(nn.Module):
         
         # image = Image.open(image_path).convert('RGB')
         # image = self.transform(image).to('cuda').unsqueeze(0).repeat(chunks.shape[0], 1, 1, 1)
-   
+        
         image = self.transform(image).repeat(chunks.shape[0], 1, 1, 1)
-
-        # from fvcore.nn import FlopCountAnalysis, flop_count_table
-        # self.cls_model.eval()
-        # input_tensor_1 = image # Example input
-        # input_tensor_2 = normalized_coords         # Another example input
-        # inputs = (input_tensor_1, input_tensor_2)    # Tuple of inputs
-        # flops = FlopCountAnalysis(self.cls_model, inputs)
-        # print(flop_count_table(flops))
-        # print(asdad)
 
         with torch.no_grad():
             logits = self.cls_model(image, normalized_coords)
             logits  = logits.reshape(-1, logits.shape[-1])
 
         return logits[:normalized_coords0.shape[0], :]
-#######################################################################################
-
 
 
     def prepare_targets(self, targets, images):
