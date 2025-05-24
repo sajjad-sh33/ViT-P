@@ -3,7 +3,7 @@
 
 This repository includes the implementation for our paper, The Missing Point in Vision Transformers for Universal Image Segmentation.
 
-<img src="images/SOTA.png" width="100%"/>
+<img src="images/Results.png" width="100%"/>
 
 ViT-P is a two-stage segmentation framework that decouples mask generation from classification. The first stage employs a proposal generator to produce class-agnostic mask proposals, while the second stage utilizes a point-based classification model built on the vision transformer to refine predictions by focusing on mask central points. ViT-P serves as a pre-training-free adapter, allowing the integration of various pre-trained vision transformers without modifying their architecture, which ensures adaptability to dense prediction tasks. Additionally, ViT-P demonstrates that coarse and bounding box annotations can effectively enhance classification without requiring additional training on fine annotation datasets, thereby reducing annotation costs while maintaining strong performance. Extensive experiments across COCO, ADE20K, and Cityscapes datasets validate the effectiveness of ViT-P, achieving state-of-the-art results with 54.0 PQ on ADE20K panoptic segmentation, 87.4 mIoU on Cityscapes semantic segmentation, and 63.6 mIoU on ADE20K semantic segmentation.
 
