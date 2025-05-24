@@ -159,7 +159,6 @@ class Mask2FormerHead(BaseDecodeHead):
         self.Classification_WEIGHTS = Classification_WEIGHTS
         self.alpha = alpha_semantic
 
-####################################################################################################
         default_cfg = OmegaConf.create(dinov2_default_config)
         cfg = OmegaConf.load(self.Classification_Config_Path )
         cfg = OmegaConf.merge(default_cfg, cfg)
@@ -187,7 +186,6 @@ class Mask2FormerHead(BaseDecodeHead):
 
         # self.padding = torch.rand(250, 2)
 
-####################################################################################################
 
     def init_weights(self):
         for m in self.decoder_input_projs:
@@ -623,12 +621,8 @@ class Mask2FormerHead(BaseDecodeHead):
         """
         all_cls_scores, all_mask_preds = self(inputs, img_metas)
         mask_cls_result, mask_pred_result = all_cls_scores[-1], all_mask_preds[-1]
-        # ori_h, ori_w, _ = img_metas[0]['ori_shape']
 
         # semantic inference
-
-##################################################################################
-
         mask_cls_result0 = self.create_class_tensor_no_loop(mask_pred_result[0,:,:,:], img_metas[-1]["filename"],img)
 
         in_vocab_cls_results = mask_cls_result[..., :-1] # remove void
@@ -636,22 +630,7 @@ class Mask2FormerHead(BaseDecodeHead):
         
         out_vocab_cls_probs = out_vocab_cls_results.softmax(-1)
         in_vocab_cls_results = in_vocab_cls_results.softmax(-1)
-        # self.alpha = 0.3
-        # self.alpha = 0.4
-
-
-        # mask_threshold = 0.0
-        # stability_score_offset = 1.0
-        # stability_score = self.calculate_stability_score(mask_pred_result,mask_threshold, stability_score_offset)>0.5
-
-
-        # valid_masking = (mask_pred_result > 0).to(mask_pred_result).sum(-1).sum(-1) > 0
-        # valid_masking = valid_masking.to(in_vocab_cls_results.dtype).unsqueeze(-1)
-        # alpha = torch.ones_like(in_vocab_cls_results) * self.alpha
-        # alpha = alpha * valid_masking
-
-        
-        
+      
         cls_logits_seen = (in_vocab_cls_results ** (1 - self.alpha) *  out_vocab_cls_probs**self.alpha)
         cls_results = cls_logits_seen
         
@@ -660,8 +639,6 @@ class Mask2FormerHead(BaseDecodeHead):
             cls_results * (1.0 - is_void_prob),
             is_void_prob], dim=-1)
         mask_cls_result = torch.log(mask_cls_probs + 1e-8)
-##################################################################################
-
 
         mask_cls_result = F.softmax(mask_cls_result, dim=-1)[..., :-1]
         mask_pred_result = mask_pred_result.sigmoid()
@@ -669,20 +646,11 @@ class Mask2FormerHead(BaseDecodeHead):
         return seg_mask
 
 
-####################################################################################### for dinov2
     def create_class_tensor_no_loop(self, masks, image_path,img):
         target_size = 100
         q, h, w = masks.shape
-        # h2, w2 = segmentation_mask.shape
-        # num_classes = 150
-        # num_classes = 19
-        
-        # segmentation_mask = torch.where(segmentation_mask == 255, torch.tensor(150), segmentation_mask)
-        # segmentation_mask = torch.where(segmentation_mask == 0, torch.tensor(151), segmentation_mask)
-        # segmentation_mask = segmentation_mask - 1
         
         max_indices = torch.argmax(masks.view(q, -1), dim=1)
-        # max_coords = torch.unravel_index(max_indices, (h, w))
 
         max_indices_np = max_indices.cpu().numpy()
         max_coords_np = np.unravel_index(max_indices_np, (h, w))
@@ -690,7 +658,6 @@ class Mask2FormerHead(BaseDecodeHead):
 
         normalized_coords0 = torch.stack([max_coords[0] / float(h), max_coords[1] / float(w)], dim=-1).to('cuda')
 
-        # print(image_path)       
         chunks = torch.split(normalized_coords0, target_size)
         if chunks[-1].size(0) < target_size:
             padding_rows = target_size - chunks[-1].size(0)
@@ -699,22 +666,13 @@ class Mask2FormerHead(BaseDecodeHead):
             chunks = chunks[:-1] + (torch.cat((chunks[-1], padding), dim=0),)
 
 
-        # if chunks[-1].size(0) < target_size:
-        #     padding_rows = target_size - chunks[-1].size(0)
-        #     padding = chunks[-1].repeat((padding_rows // chunks[-1].size(0)) + 1, 1)[:padding_rows]
-        #     chunks = chunks[:-1] + (torch.cat((chunks[-1], padding), dim=0),)
-
         chunks = torch.stack(chunks)
         normalized_coords = 2 * chunks -1
         
         image = Image.open(image_path).convert('RGB')
         image = self.transform(image).to('cuda').unsqueeze(0).repeat(chunks.shape[0], 1, 1, 1)
 
-        # image= self.transform(img[0]).to('cuda').unsqueeze(0).repeat(chunks.shape[0], 1, 1, 1)
-
-
         with torch.no_grad():
             logits = self.cls_model(image, normalized_coords)
             logits  = logits.reshape(-1, logits.shape[-1])
         return logits[:normalized_coords0.shape[0], :]
-#######################################################################################
