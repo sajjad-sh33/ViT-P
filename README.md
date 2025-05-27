@@ -55,7 +55,7 @@ export PYTHONPATH="$PYTHONPATH:$(pwd)"
 
 ## Acknowledgement
 
-We thank the authors of [OneFormer](https://github.com/SHI-Labs/OneFormer), [InternImage](https://github.com/OpenGVLab/InternImage), and [dinov2][(https://github.com/SHI-Labs/Neighborhood-Attention-Transformer](https://github.com/facebookresearch/dinov2)) for releasing their helpful codebases.
+We thank the authors of [OneFormer](https://github.com/SHI-Labs/OneFormer), [InternImage](https://github.com/OpenGVLab/InternImage), and [dinov2](https://github.com/facebookresearch/dinov2)) for releasing their helpful codebases.
 
 
 
